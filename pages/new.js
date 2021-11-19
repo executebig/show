@@ -20,10 +20,11 @@ import Select from "@mui/material/Select";
 import Input from "@mui/material/Input";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
+import Nav from "../components/Nav";
+
 export default function NewProject({ data, batches }) {
   const [batch, setBatch] = useState("");
   const handleBatchChange = (event) => {
-    console.log(event.target.value);
     setBatch(event.target.value);
   };
 
@@ -36,15 +37,7 @@ export default function NewProject({ data, batches }) {
       </Head>
 
       <main>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Show Execute Big
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </Box>
+        <Nav />
 
         <Container maxWidth="sm">
           <Box

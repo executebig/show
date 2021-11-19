@@ -14,8 +14,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 
 import Link from "next/link";
+
+import Nav from "../components/Nav";
 
 export default function Home({ projects }) {
 
@@ -28,28 +31,25 @@ export default function Home({ projects }) {
       </Head>
 
       <main>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Show Execute Big
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </Box>
+        <Nav />
 
-        <Container maxWidth="sm">
-          {projects && projects.map((p) => (
-            <Card variant="outlined" sx={{ m: 2 }} key={p.key}>
-              <CardContent>
-                <h1>{p.name}</h1>
-              </CardContent>
-              <CardActions>
-                {p.demo && (<Button size="medium"><Link href={p.demo}>Demo</Link></Button>)}
-                {p.source && (<Button size="medium"><Link href={p.source}>Source</Link></Button>)}
-              </CardActions>
-            </Card>
-          ))}
+        <Container maxWidth="lg">
+            <Grid container spacing={2} sx={{mt: 2}}>
+            {projects && projects.map((p) => (
+                <Grid item xs={4}>
+                    <Card variant="outlined" key={p.key}>
+                    <CardContent>
+                        <h1>{p.name}</h1>
+                        <p>By {p.user.handle}</p>
+                    </CardContent>
+                    <CardActions>
+                        {p.demo && (<Button size="medium"><Link href={p.demo}><a target="_blank">Demo</a></Link></Button>)}
+                        {p.source && (<Button size="medium"><Link href={p.source}><a target="_blank">Source</a></Link></Button>)}
+                    </CardActions>
+                    </Card>
+                </Grid>
+            ))}
+            </Grid>
         </Container>
       </main>
     </div>
@@ -60,8 +60,6 @@ Home.getInitialProps = async ({ req, res }) => {
   // get active batches
   const projectResponse = await fetch(process.env.APP_URL + "/api/projects");
   const projects = await projectResponse.json();
-
-  console.log(projects);
 
   return {
     projects

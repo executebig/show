@@ -2,7 +2,7 @@ import { CookiesProvider } from "react-cookie";
 
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }) {
+function Show({ Component, pageProps }) {
   return (
     <CookiesProvider>
       <Component {...pageProps} />
@@ -10,4 +10,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default Show;
