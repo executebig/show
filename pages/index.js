@@ -36,8 +36,8 @@ export default function Home({ projects }) {
         <Container maxWidth="lg">
             <Grid container spacing={2} sx={{mt: 2}}>
             {projects && projects.map((p) => (
-                <Grid item xs={4}>
-                    <Card variant="outlined" key={p.key}>
+                <Grid item xs={4} key={p.key}>
+                    <Card variant="outlined">
                     <CardContent>
                         <h1>{p.name}</h1>
                         <p>By {p.user.handle}</p>
