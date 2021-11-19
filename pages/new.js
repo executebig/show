@@ -77,7 +77,7 @@ export default function NewProject({ data, batches }) {
                 name="batch"
               >
                 {batches && batches.map((batch) => (
-                  <MenuItem value={batch.key}>{batch.name}</MenuItem>
+                  <MenuItem value={batch.key} key={batch.key}>{batch.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>

@@ -40,7 +40,7 @@ export default function Home({ projects }) {
 
         <Container maxWidth="sm">
           {projects && projects.map((p) => (
-            <Card variant="outlined" sx={{ m: 2 }}>
+            <Card variant="outlined" sx={{ m: 2 }} key={p.key}>
               <CardContent>
                 <h1>{p.name}</h1>
               </CardContent>
