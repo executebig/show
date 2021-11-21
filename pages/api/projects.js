@@ -12,10 +12,10 @@ export default async function handler(req, res) {
 
         // fetch user handle of each project and insert into the object
         const userMapped = await Promise.all(projects.items.map(async (project) => {
-            const user = await deta.Base("users").fetch(project.user_id);
+            const user = await deta.Base("users").get(project.user);
             return {
                 ...project,
-                user: user.items[0],
+                user
             };
         }))
 
