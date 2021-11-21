@@ -4,7 +4,7 @@ const projects_db = deta.Base("projects");
 
 export default async function handler(req, res) {
     let last_retrieved = req.query.last;
-    const projects = await projects_db.fetch({}, {limit: 6, last: last_retrieved});
+    const projects = await projects_db.fetch({}, {limit: 9, last: last_retrieved});
     const next_project = await projects_db.fetch({}, {limit: 1, last: projects.items[projects.count - 1].key});
 
     if (projects.count > 0) {

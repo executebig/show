@@ -11,7 +11,7 @@ export default function Nav() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href="/">Show Execute Big</Link>  
+            <Link href="/">Show Execute Big!</Link>  
           </Typography>
           <Button color="inherit">
             <Link href="/new"><a target="_blank">New Project</a></Link>
