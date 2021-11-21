@@ -86,7 +86,7 @@ async function getTokenFromCode(code) {
       client_secret: process.env.DISCORD_CLIENT_SECRET,
       code,
       grant_type: "authorization_code",
-      redirect_uri: process.env.APP_URL + "/api/callback",
+      redirect_uri: process.env.BASE_URL + "/api/callback",
       scope: "identify email guilds",
     }),
     headers: {

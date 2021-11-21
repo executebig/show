@@ -115,7 +115,7 @@ NewProject.getInitialProps = async ({ req, res }) => {
   }
 
   // get active batches
-  const batchResponse = await fetch(process.env.APP_URL + "/api/batches")
+  const batchResponse = await fetch(process.env.BASE_URL + "/api/batches")
   const batches = await batchResponse.json();
 
   return {
