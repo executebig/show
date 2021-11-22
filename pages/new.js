@@ -72,7 +72,10 @@ export default function NewProject(props) {
 
   /* onload to get batches */
   const fetchBatches = async () => {
-    let { data: batches, error } = await supabase.from("batches").select();
+    let { data: batches, error } = await supabase
+      .from("batches")
+      .select()
+      .is("is_active", true);
     setBatches(batches);
   };
 
