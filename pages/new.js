@@ -67,6 +67,12 @@ export default function NewProject(props) {
 
   useEffect(() => {
     fetchBatches();
+
+    if (!props.user || !props.user.v) {
+      window.location.href = "/api/auth";
+      return;
+    }
+
     setUser(props.user);
   }, []);
 
@@ -205,8 +211,18 @@ export default function NewProject(props) {
 
 export const getServerSideProps = async (ctx) => {
   const { req, res } = ctx;
-
   const cookies = parseCookies(req);
+  const userPropsExist = cookies.uid && cookies.iat && cookies.v;
+
+  if (!userPropsExist) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/api/auth",
+      },
+      props: {},
+    };
+  }
 
   return {
     props: {
