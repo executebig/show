@@ -1,10 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-const fetch = require("node-fetch");
-const crypto = require("crypto");
+import fetch from "node-fetch";
+import crypto from "crypto";
 
-const deta = require("./_deta");
-const users_db = deta.Base("users");
+import { supabase } from "../../libs/supabaseClient";
 
 export default async function handler(req, res) {
   const access_token = await getTokenFromCode(req.query.code);
@@ -39,8 +38,8 @@ export default async function handler(req, res) {
       );
   }
 
-  const data = {
-    key: userData.id,
+  const { data, error } = await supabase.from("users").upsert({
+    id: userData.id,
     handle: userData.username + "#" + userData.discriminator,
     email: userData.email,
     avatar:
@@ -49,11 +48,7 @@ export default async function handler(req, res) {
       "/" +
       userData.avatar +
       ".png",
-  };
-
-  // create the user record in the database
-  const inserted = await users_db.put(data);
-
+  });
   const timestamp = new Date().getTime();
 
   // hash uid + iat with key for validation
@@ -75,6 +70,7 @@ export default async function handler(req, res) {
     `iat=${timestamp}; Path=/; HttpOnly; Secure; SameSite=Lax`,
     `v=${v_hash}; Path=/; HttpOnly; Secure; SameSite=Lax`,
   ]);
+
   res.redirect("/new");
 }
 
