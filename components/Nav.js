@@ -16,9 +16,9 @@ export default class Nav extends React.Component {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               <Link href="/">Show Execute Big!</Link>
             </Typography>
-            <Button color="inherit">
-              <Link href="/new">New Project</Link>
-            </Button>
+            <Link href="/new">
+              <Button color="inherit">New Project</Button>
+            </Link>
           </Toolbar>
         </AppBar>
       </Box>
