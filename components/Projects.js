@@ -16,17 +16,49 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 import Link from "next/link";
 
+// Pagination Component
+const ControlledPagination = ({ page, totalPages, setCurrentPage }) => {
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  return (
+    <Container maxWidth="lg">
+      <Stack spacing={2} sx={{ my: 3, mx: "auto", width: 200 }}>
+        <Pagination count={totalPages} page={page} onChange={handleChange} />
+      </Stack>
+    </Container>
+  );
+};
+
 export default function Projects(props) {
   const [projects, setProjects] = useState([]);
+  const [count, setCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 9;
 
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    fetchCount().then(() => fetchProjects());
+  }, [currentPage]);
+
+  const fetchCount = async () => {
+    const { count } = await supabase
+      .from("projects")
+      .select("*", { count: "exact" });
+
+    setCount(count);
+  };
 
   const fetchProjects = async () => {
+    // 11/24/2021 - rewrite to use pagination
+    const startIndex = currentPage * pageSize - pageSize;
+    const endIndex = currentPage * pageSize - 1;
+
     let { data: projects, error } = await supabase
       .from("projects")
       .select(
@@ -44,12 +76,13 @@ export default function Projects(props) {
         ),
         demo,
         source
-      `
+        `
       )
+      .range(startIndex, endIndex)
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.log("error [fetchProjectg]", error);
+      console.log("error [fetchProject]", error);
     } else {
       setProjects(projects);
     }
@@ -61,6 +94,11 @@ export default function Projects(props) {
         {projects.map((project) => (
           <Project key={project.id} project={project} />
         ))}
+        <ControlledPagination
+          page={currentPage}
+          totalPages={Math.ceil(count / pageSize)}
+          setCurrentPage={setCurrentPage}
+        />
       </Grid>
     </Container>
   );
