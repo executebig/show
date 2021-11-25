@@ -84,7 +84,7 @@ export default function Projects(props) {
           {Array(pageSize)
             .fill(0)
             .map((_, index) => {
-              return <ProjectSkeleton />;
+              return <ProjectSkeleton key={index} />;
             })}
         </Grid>
       )}
