@@ -19,18 +19,20 @@ import Avatar from "@mui/material/Avatar";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
+import UILink from "@mui/material/Link";
 
 import Link from "next/link";
-import UILink from "@mui/material/Link";
 
 export default function Projects(props) {
   const [projects, setProjects] = useState([]);
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const pageSize = 9;
 
   useEffect(() => {
-    fetchCount().then(() => fetchProjects());
+    fetchCount().then(() => fetchProjects().then(() => setLoading(false)));
   }, [currentPage]);
 
   const fetchCount = async () => {
@@ -77,6 +79,16 @@ export default function Projects(props) {
 
   return (
     <Container maxWidth="lg">
+      {loading && (
+        <Grid container alignItems="stretch" sx={{ mt: 2 }} spacing={2}>
+          {Array(pageSize)
+            .fill(0)
+            .map((_, index) => {
+              return <ProjectSkeleton />;
+            })}
+        </Grid>
+      )}
+
       <Grid container alignItems="stretch" sx={{ mt: 2 }} spacing={2}>
         {projects.map((project) => (
           <Project key={project.id} project={project} />
@@ -204,6 +216,57 @@ const Project = ({ project }) => {
                 </Link>
               </Grid>
             )}
+          </Grid>
+        </Box>
+      </Card>
+    </Grid>
+  );
+};
+
+const ProjectSkeleton = () => {
+  return (
+    <Grid item xs={12} md={6} lg={4}>
+      <Card
+        variant="outlined"
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+        }}
+      >
+        <div>
+          <CardHeader
+            avatar={
+              <Skeleton
+                animation="wave"
+                variant="circular"
+                width={40}
+                height={40}
+              />
+            }
+            title={<Skeleton />}
+            subheader={<Skeleton />}
+          />
+          <CardContent>
+            <Typography component="h2">
+              <Skeleton />
+            </Typography>
+            <Typography component="p">
+              {/* 11/24/2021 - long text collapsed */}
+              <Skeleton height={120} />
+            </Typography>
+          </CardContent>
+        </div>
+        <Box sx={{ m: 2, mt: "auto" }}>
+          <Skeleton width={100} />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Skeleton />
+            </Grid>
+            <Grid item xs={6}>
+              <Skeleton />
+            </Grid>
           </Grid>
         </Box>
       </Card>
