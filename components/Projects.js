@@ -184,20 +184,24 @@ const Project = ({ project }) => {
           <Grid container spacing={2}>
             {project.demo && (
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>
-                  <Link href={project.demo}>
-                    <a target="_blank">Demo</a>
-                  </Link>
-                </Button>
+                <Link href={project.demo}>
+                  <a target="_blank">
+                    <Button variant="outlined" fullWidth>
+                      Demo
+                    </Button>
+                  </a>
+                </Link>
               </Grid>
             )}
             {project.source && (
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>
-                  <Link href={project.source}>
-                    <a target="_blank">Source</a>
-                  </Link>
-                </Button>
+                <Link href={project.source}>
+                  <a target="_blank">
+                    <Button variant="outlined" fullWidth>
+                      Source
+                    </Button>
+                  </a>
+                </Link>
               </Grid>
             )}
           </Grid>
