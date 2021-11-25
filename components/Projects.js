@@ -18,23 +18,10 @@ import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 
 import Link from "next/link";
-
-// Pagination Component
-const ControlledPagination = ({ page, totalPages, setCurrentPage }) => {
-  const handleChange = (event, value) => {
-    setCurrentPage(value);
-  };
-
-  return (
-    <Container maxWidth="lg">
-      <Stack spacing={2} sx={{ my: 3, mx: "auto", width: 200 }}>
-        <Pagination count={totalPages} page={page} onChange={handleChange} />
-      </Stack>
-    </Container>
-  );
-};
+import UILink from "@mui/material/Link";
 
 export default function Projects(props) {
   const [projects, setProjects] = useState([]);
@@ -90,7 +77,7 @@ export default function Projects(props) {
 
   return (
     <Container maxWidth="lg">
-      <Grid container alignItems="stretch" sx={{ mt: 2 }}>
+      <Grid container alignItems="stretch" sx={{ mt: 2 }} spacing={2}>
         {projects.map((project) => (
           <Project key={project.id} project={project} />
         ))}
@@ -104,45 +91,118 @@ export default function Projects(props) {
   );
 }
 
+// Pagination Component
+const ControlledPagination = ({ page, totalPages, setCurrentPage }) => {
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  return (
+    <Container maxWidth="lg">
+      <Stack spacing={2} sx={{ my: 3, mx: "auto", width: 200 }}>
+        <Pagination count={totalPages} page={page} onChange={handleChange} />
+      </Stack>
+    </Container>
+  );
+};
+
+// Long Text Collapsed Component
+const LongText = ({ text, maxLength }) => {
+  const [collapsed, setCollapsed] = useState(true);
+  const [displayText, setDisplayText] = useState(
+    text.substring(0, maxLength).trim()
+  );
+  const isLongText = text.length > maxLength;
+
+  const handleClick = () => {
+    setCollapsed(!collapsed);
+    if (collapsed) {
+      setDisplayText(text);
+    } else {
+      setDisplayText(text.substring(0, maxLength).trim());
+    }
+  };
+
+  return (
+    <>
+      {displayText}
+      {isLongText &&
+        (collapsed ? (
+          <>
+            {"... "}
+            <UILink onClick={handleClick} href="#" underline="hover">
+              More »
+            </UILink>
+          </>
+        ) : (
+          <UILink onClick={handleClick} href="#" underline="hover">
+            « Less
+          </UILink>
+        ))}
+    </>
+  );
+};
+
 const Project = ({ project }) => {
   return (
-    <Grid item xs={12} md={6} lg={4} component={Card} variant="outlined">
-      <CardHeader
-        avatar={<Avatar alt={project.user.handle} src={project.user.avatar} />}
-        title={project.user.handle}
-        subheader={new Date(project.created_at).toLocaleString()}
-      />
-      <CardContent>
-        <Typography variant="h5" component="h2">
-          {project.name}
-        </Typography>
-        <Typography component="p" sx={{ mt: 1 }}>
-          {project.description}
-        </Typography>
-
-        <Chip
-          size="small"
-          label={project.batch.name}
-          variant="outlined"
-          sx={{ mt: 2 }}
-        />
-      </CardContent>
-      <CardActions>
-        {project.demo && (
-          <Button size="medium" variant="outlined">
-            <Link href={project.demo}>
-              <a target="_blank">Demo</a>
-            </Link>
-          </Button>
-        )}
-        {project.source && (
-          <Button size="medium" variant="outlined">
-            <Link href={project.source}>
-              <a target="_blank">Source</a>
-            </Link>
-          </Button>
-        )}
-      </CardActions>
+    <Grid item xs={12} md={6} lg={4}>
+      <Card
+        variant="outlined"
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+        }}
+      >
+        <div>
+          <CardHeader
+            avatar={
+              <Avatar alt={project.user.handle} src={project.user.avatar} />
+            }
+            title={project.user.handle}
+            subheader={new Date(project.created_at).toLocaleDateString()}
+          />
+          <CardContent>
+            <Typography variant="h5" component="h2">
+              {project.name}
+            </Typography>
+            <Typography component="p" sx={{ mt: 1 }}>
+              {/* 11/24/2021 - long text collapsed */}
+              <LongText text={project.description} maxLength={180} />
+            </Typography>
+          </CardContent>
+        </div>
+        <Box sx={{ m: 2, mt: "auto" }}>
+          <Chip
+            size="small"
+            label={project.batch.name}
+            variant="outlined"
+            sx={{ mb: 2 }}
+            color="primary"
+          />
+          <Grid container spacing={2}>
+            {project.demo && (
+              <Grid item xs={6}>
+                <Button variant="outlined" fullWidth>
+                  <Link href={project.demo}>
+                    <a target="_blank">Demo</a>
+                  </Link>
+                </Button>
+              </Grid>
+            )}
+            {project.source && (
+              <Grid item xs={6}>
+                <Button variant="outlined" fullWidth>
+                  <Link href={project.source}>
+                    <a target="_blank">Source</a>
+                  </Link>
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+      </Card>
     </Grid>
   );
 };
